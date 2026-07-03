@@ -8,7 +8,7 @@
 
 ## Repository Summary
 
-This repository contains two completed internship projects developed for the DecodeLabs AI training track. The first project demonstrates a deterministic rule-based chatbot implemented with Streamlit. The second project demonstrates supervised learning on the Iris dataset using a K-Nearest Neighbors classifier.
+This repository contains three completed internship projects developed for the DecodeLabs AI training track. The first project demonstrates a deterministic rule-based chatbot implemented with Streamlit. The second project demonstrates supervised learning on the Iris dataset using a K-Nearest Neighbors classifier. The third project demonstrates a content-based recommendation engine built with TF-IDF and cosine similarity.
 
 Each project is maintained in its own directory so the implementation, documentation, and dependencies remain clearly separated.
 
@@ -40,13 +40,26 @@ pip install -r "Data Classification using AI/requirements.txt"
 python "Data Classification using AI/app.py"
 ```
 
+### Project 3: AI Recommendation Logic
+
+Location: [AI Recommendation Logic/](AI%20Recommendation%20Logic)
+
+This project implements a content-based filtering pipeline for job-role recommendations. It maps user skills to a shared vocabulary, scores roles using TF-IDF and cosine similarity, and returns the top career matches.
+
+Run instructions:
+
+```bash
+pip install -r "AI Recommendation Logic/requirements.txt"
+python "AI Recommendation Logic/app.py"
+```
+
 ## Technical Stack
 
 - Python
 - Streamlit for the chatbot interface
 - scikit-learn for machine learning
 - pandas and numpy for data handling
-- matplotlib and seaborn for visualisation
+- matplotlib and seaborn for visualisation and ranking charts
 
 ## Repository Structure
 
@@ -61,6 +74,10 @@ DecodeLabs/
 │   ├── README.md
 │   ├── requirements.txt
 │   └── hi.py
+├── AI Recommendation Logic/
+│   ├── app.py
+│   ├── README.md
+│   └── requirements.txt
 └── Rule-Based AI Chatbot/
     ├── app.py
     ├── README.md
