@@ -92,4 +92,4 @@ DecodeLabs/
 
 ## Status
 
-Both projects are complete and available in the repository.
+All projects are complete and available in the repository.
