@@ -74,7 +74,7 @@ python "Image or Text Recognition (Basic)/object_detection.py" "Image or Text Re
 - scikit-learn for machine learning
 - pandas and numpy for data handling
 - matplotlib and seaborn for visualisation and ranking charts
-- OpenCV, pytesseract, Pillow, and matplotlib for computer vision and OCR
+- OpenCV, pytesseract, and Pillow for OCR and computer vision
 
 ## Repository Structure
 
