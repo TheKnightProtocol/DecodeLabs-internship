@@ -8,7 +8,7 @@
 
 ## Repository Summary
 
-This repository contains three completed internship projects developed for the DecodeLabs AI training track. The first project demonstrates a deterministic rule-based chatbot implemented with Streamlit. The second project demonstrates supervised learning on the Iris dataset using a K-Nearest Neighbors classifier. The third project demonstrates a content-based recommendation engine built with TF-IDF and cosine similarity.
+This repository contains four completed internship projects developed for the DecodeLabs AI training track. The first project demonstrates a deterministic rule-based chatbot implemented with Streamlit. The second project demonstrates supervised learning on the Iris dataset using a K-Nearest Neighbors classifier. The third project demonstrates a content-based recommendation engine built with TF-IDF and cosine similarity. The fourth project demonstrates image and text recognition using OCR and MobileNet SSD object detection.
 
 Each project is maintained in its own directory so the implementation, documentation, and dependencies remain clearly separated.
 
@@ -53,6 +53,20 @@ pip install -r "AI Recommendation Logic/requirements.txt"
 python "AI Recommendation Logic/app.py"
 ```
 
+### Project 4: Image or Text Recognition (Basic)
+
+Location: [Image or Text Recognition (Basic)/](Image%20or%20Text%20Recognition%20%28Basic%29)
+
+This project implements a basic computer vision pipeline with OCR and object detection. It preprocesses images, extracts text with Tesseract, detects objects with MobileNet SSD, and saves machine-readable outputs.
+
+Run instructions:
+
+```bash
+pip install -r "Image or Text Recognition (Basic)/requirements.txt"
+python "Image or Text Recognition (Basic)/image_text_recognition.py" "Image or Text Recognition (Basic)/images/sample1.jpg"
+python "Image or Text Recognition (Basic)/object_detection.py" "Image or Text Recognition (Basic)/images/sample2.png"
+```
+
 ## Technical Stack
 
 - Python
@@ -60,6 +74,7 @@ python "AI Recommendation Logic/app.py"
 - scikit-learn for machine learning
 - pandas and numpy for data handling
 - matplotlib and seaborn for visualisation and ranking charts
+- OpenCV, pytesseract, Pillow, and matplotlib for computer vision and OCR
 
 ## Repository Structure
 
@@ -78,6 +93,15 @@ DecodeLabs/
 │   ├── app.py
 │   ├── README.md
 │   └── requirements.txt
+├── Image or Text Recognition (Basic)/
+│   ├── image_text_recognition.py
+│   ├── object_detection.py
+│   ├── README.md
+│   ├── requirements.txt
+│   ├── .gitignore
+│   ├── images/
+│   ├── models/
+│   └── output/
 └── Rule-Based AI Chatbot/
     ├── app.py
     ├── README.md
@@ -92,4 +116,4 @@ DecodeLabs/
 
 ## Status
 
-Both projects are complete and available in the repository.
+All four projects are complete and available in the repository.
