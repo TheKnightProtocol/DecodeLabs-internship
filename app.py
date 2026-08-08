@@ -13,6 +13,8 @@ import seaborn as sns
 from datetime import datetime
 import time
 import random
+import base64
+from io import BytesIO
 
 # ============================================================================
 # PAGE CONFIGURATION
@@ -23,6 +25,18 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# ============================================================================
+# CREATE A SIMPLE LOGO AS BASE64 (No external URL needed)
+# ============================================================================
+def create_logo():
+    """Create a simple text-based logo (no external dependencies)"""
+    return """
+    <div style="text-align:center; padding:10px 0; border-bottom:2px solid #333; margin-bottom:10px;">
+        <h1 style="font-size:28px; font-weight:700; color:#000; margin:0;">Decode Labs</h1>
+        <p style="font-size:14px; color:#555; margin:0;">Your Digital Lab</p>
+    </div>
+    """
 
 # ============================================================================
 # CUSTOM CSS FOR PROFESSIONAL LOOK
@@ -141,7 +155,8 @@ st.markdown("""
 # ============================================================================
 # SIDEBAR NAVIGATION
 # ============================================================================
-st.sidebar.image("https://via.placeholder.com/200x80/000000/FFFFFF?text=Decode+Labs", use_column_width=True)
+# Use simple text logo instead of external image
+st.sidebar.markdown(create_logo(), unsafe_allow_html=True)
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("### 📊 Navigation")
@@ -491,7 +506,7 @@ elif selected_page == "🎯 Project 3: Recommendation":
     with col1:
         st.markdown("### 🔍 Skill Matching")
         st.markdown("**Enter your skills (comma-separated):**")
-        skills_input = st.text_input("", placeholder="e.g., Python, Machine Learning, SQL")
+        skills_input = st.text_input("", placeholder="e.g., Python, Machine Learning, SQL", key="skills_input")
         
         if st.button("🔍 Find My Match", use_container_width=True):
             # Simulate recommendation results
