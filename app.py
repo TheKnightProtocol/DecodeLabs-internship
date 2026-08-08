@@ -1,6 +1,7 @@
 """
-CYBERPUNK AI SUITE – Neon Dream v1.3 (Lightning Fast)
-Projects: Chatbot · Classification · Recommendation · Vision
+CYBERPUNK AI SUITE – Neon Dream v1.4 (Lightning Fast)
+Projects: Chatbot · Classification · Recommendation
+Vision: Placeholder (Coming Soon)
 """
 
 import logging
@@ -10,7 +11,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 import streamlit as st
-from PIL import Image
 from sklearn.datasets import load_iris
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import classification_report, confusion_matrix
@@ -268,7 +268,7 @@ with st.sidebar:
                 ⚡ NEON AI ⚡
             </span>
             <div style="font-family: 'Share Tech Mono', monospace; color: #00ffe1; font-size: clamp(0.5rem, 1.5vw, 0.7rem); border-bottom: 1px solid #00ffe1; padding-bottom: 8px;">
-                [ SYSTEM v1.3 ]
+                [ SYSTEM v1.4 ]
             </div>
         </div>
         """,
@@ -281,7 +281,7 @@ with st.sidebar:
             "💬 CHATBOT",
             "📊 CLASSIFY",
             "💼 RECOMMEND",
-            "🖼️ VISION",
+            "🖼️ VISION (Coming Soon)",
         ],
         index=0,
     )
@@ -340,7 +340,7 @@ def project_chatbot():
         elif normalized == "time":
             intent, response, path = "system_time", f"⏰ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", "time"
         elif normalized == "about":
-            intent, response, path = "about", "CYBERPUNK AI v1.3 – Rule-based core with neon UI.", "about"
+            intent, response, path = "about", "CYBERPUNK AI v1.4 – Rule-based core with neon UI.", "about"
         elif normalized in {"ipo", "ipo explanation"}:
             intent, response, path = "ipo", "IPO = Input → Process → Output. Deterministic flow.", "ipo"
         elif normalized in {"guardrail", "guardrails"}:
@@ -376,7 +376,6 @@ def project_classification():
     X, y, feature_names, target_names = load_iris_data()
 
     with st.expander("📡 DATASET SCAN", expanded=False):
-        # Display as simple table without pandas
         st.write("**First 5 samples:**")
         for i in range(min(5, len(X))):
             st.write(f"{i+1}. {X[i]} → {target_names[y[i]]}")
@@ -419,7 +418,6 @@ def project_classification():
 
                 st.subheader("📜 CLASSIFICATION REPORT")
                 report = classification_report(y_test, y_pred, target_names=target_names, output_dict=True)
-                # Display as simple table
                 st.write("| Class | Precision | Recall | F1-Score | Support |")
                 st.write("|-------|-----------|--------|----------|---------|")
                 for cls in target_names:
@@ -434,7 +432,6 @@ def project_classification():
 # ----------------------------------------------------------------------
 @st.cache_data
 def get_job_data():
-    # Using lists instead of pandas
     job_titles = ["Data Scientist", "ML Engineer", "Cloud Architect", "Web Dev", "DevOps", 
                   "Data Analyst", "Full Stack", "Python Dev", "Frontend", "Backend", 
                   "Security", "Mobile"]
@@ -488,7 +485,6 @@ def project_recommendation():
             tfidf = vectorizer.fit_transform(documents)
             similarities = cosine_similarity(tfidf[-1], tfidf[:-1]).flatten()
 
-            # Get top N indices
             top_indices = np.argsort(similarities)[::-1][:top_n]
             
             plt.style.use('dark_background')
@@ -518,83 +514,26 @@ def project_recommendation():
             st.info("👈 INPUT SKILLS & SCAN.")
 
 # ----------------------------------------------------------------------
-# PROJECT 4: VISION
+# PROJECT 4: VISION (PLACEHOLDER)
 # ----------------------------------------------------------------------
-def project_vision():
+def project_vision_placeholder():
     st.markdown('<div class="main-header">🖼️ CYBER EYE (VISION)</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-header">// YOLOv8 + OCR // REAL-TIME ANALYSIS</div>', unsafe_allow_html=True)
-
-    # Lazy imports with correct error handling
-    YOLO_AVAILABLE = False
-    EASYOCR_AVAILABLE = False
+    st.markdown('<div class="sub-header">// COMING SOON // YOLOv8 + OCR</div>', unsafe_allow_html=True)
     
-    try:
-        from ultralytics import YOLO
-        YOLO_AVAILABLE = True
-    except ImportError as e:
-        yolo_error = str(e)
-
-    try:
-        import easyocr
-        EASYOCR_AVAILABLE = True
-    except ImportError as e:
-        easyocr_error = str(e)
-
-    if not YOLO_AVAILABLE:
-        st.warning("⚠️ YOLO not available. Install ultralytics.")
-    if not EASYOCR_AVAILABLE:
-        st.warning("⚠️ EasyOCR not available. Install easyocr.")
-
-    uploaded_file = st.file_uploader("📂 UPLOAD IMAGE", type=["jpg", "jpeg", "png"])
-    if uploaded_file:
-        try:
-            import cv2
-            import numpy as np
-        except ImportError:
-            st.error("❌ OpenCV (cv2) is not installed.")
-            return
-
-        image = Image.open(uploaded_file).convert("RGB")
-        st.image(image, caption="ORIGINAL", use_container_width=True)
-
-        col_det, col_ocr = st.columns(2)
-
-        with col_det:
-            st.subheader("🔍 OBJECT DETECTION")
-            if YOLO_AVAILABLE:
-                with st.spinner("SCANNING..."):
-                    from ultralytics import YOLO
-                    model = YOLO("yolov8n.pt")
-                    results = model(image)
-                    annotated = results[0].plot()
-                    st.image(annotated, caption="DETECTED", use_container_width=True)
-                    detections = results[0].boxes
-                    if detections is not None and len(detections) > 0:
-                        for box in detections:
-                            cls = int(box.cls[0])
-                            conf = float(box.conf[0])
-                            st.caption(f"- {model.names[cls]} (conf: {conf:.2f})")
-                    else:
-                        st.info("No objects detected.")
-            else:
-                st.warning("YOLO offline.")
-
-        with col_ocr:
-            st.subheader("📝 TEXT EXTRACTION")
-            if EASYOCR_AVAILABLE:
-                with st.spinner("DECRYPTING..."):
-                    import easyocr
-                    reader = easyocr.Reader(["en"])
-                    img_np = np.array(image)
-                    ocr_result = reader.readtext(img_np, detail=0)
-                    if ocr_result:
-                        st.success(f"EXTRACTED {len(ocr_result)} BLOCKS:")
-                        for t in ocr_result:
-                            st.write(f"- {t}")
-                    else:
-                        st.info("No text found.")
-            else:
-                st.warning("OCR offline.")
+    st.info("""
+    **🛠️ Vision Module is under development.**  
+    It will feature:
+    - Real-time object detection (YOLOv8)
+    - Optical Character Recognition (EasyOCR)
+    - Bounding box annotations
+    - Text extraction from images
+    
+    This module will be available in the next release.
+    """)
+    
+    # Show a cool placeholder image
+    st.image("https://img.icons8.com/fluency/200/000000/artificial-intelligence.png", width=150)
+    st.caption("AI Vision – Coming Soon")
 
 # ----------------------------------------------------------------------
 # ROUTER
@@ -605,8 +544,8 @@ elif app_mode == "📊 CLASSIFY":
     project_classification()
 elif app_mode == "💼 RECOMMEND":
     project_recommendation()
-elif app_mode == "🖼️ VISION":
-    project_vision()
+elif app_mode == "🖼️ VISION (Coming Soon)":
+    project_vision_placeholder()
 
 # ----------------------------------------------------------------------
 # FOOTER
@@ -614,7 +553,7 @@ elif app_mode == "🖼️ VISION":
 st.markdown(
     """
     <div class="footer">
-        ⚡ CYBERPUNK AI SUITE v1.3 || LIGHTNING FAST || SANKALP SHARMA ⚡
+        ⚡ CYBERPUNK AI SUITE v1.4 || LIGHTNING FAST || SANKALP SHARMA ⚡
     </div>
     """,
     unsafe_allow_html=True,
