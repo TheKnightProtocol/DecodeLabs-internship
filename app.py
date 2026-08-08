@@ -1,5 +1,5 @@
 """
-CYBERPUNK AI SUITE – Neon Dream v1.1 (Lazy Load)
+CYBERPUNK AI SUITE – Neon Dream v1.2 (Responsive)
 Projects: Chatbot · Classification · Recommendation · Vision
 """
 
@@ -31,13 +31,14 @@ st.set_page_config(
 )
 
 # ----------------------------------------------------------------------
-# CYBERPUNK NEON CSS
+# CYBERPUNK + FULLY RESPONSIVE CSS
 # ----------------------------------------------------------------------
 st.markdown(
     """
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
         
+        /* ---------- GLOBAL BASE (Mobile First) ---------- */
         .stApp {
             background: #0a0c10;
             background-image: 
@@ -48,17 +49,20 @@ st.markdown(
             color: #b0e0ff !important;
         }
         
+        /* ---------- TYPOGRAPHY (Mobile First) ---------- */
         h1, h2, h3, .main-header {
             font-family: 'Orbitron', sans-serif !important;
             font-weight: 900 !important;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
+            font-size: 1.6rem !important;
             background: linear-gradient(90deg, #00ffe1, #ff00cc, #00ffe1);
             background-size: 300% 100%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: neonFlow 4s ease-in-out infinite;
             text-shadow: 0 0 30px rgba(0, 255, 225, 0.3);
+            word-break: break-word;
         }
         @keyframes neonFlow {
             0% { background-position: 0% 50%; }
@@ -69,14 +73,16 @@ st.markdown(
             font-family: 'Share Tech Mono', monospace;
             color: #00ffe1 !important;
             text-shadow: 0 0 20px #00ffe1, 0 0 40px #ff00cc;
-            letter-spacing: 3px;
-            font-size: 1.2rem !important;
-            border-left: 4px solid #ff00cc;
-            padding-left: 15px;
+            letter-spacing: 2px;
+            font-size: 0.9rem !important;
+            border-left: 3px solid #ff00cc;
+            padding-left: 12px;
+            word-break: break-word;
         }
         
+        /* ---------- SIDEBAR (Responsive) ---------- */
         .css-1d391kg, .css-1adrfps, .stSidebar {
-            background: rgba(10, 14, 20, 0.85) !important;
+            background: rgba(10, 14, 20, 0.92) !important;
             backdrop-filter: blur(12px);
             border-right: 2px solid rgba(0, 255, 225, 0.3) !important;
             box-shadow: 10px 0 50px rgba(0, 255, 225, 0.1);
@@ -84,16 +90,20 @@ st.markdown(
         .stSidebar .stRadio label {
             font-family: 'Orbitron', sans-serif !important;
             color: #b0e0ff !important;
-            font-size: 0.9rem !important;
-            padding: 8px 12px !important;
+            font-size: 0.8rem !important;
+            padding: 6px 10px !important;
             border: 1px solid transparent;
             transition: all 0.3s ease;
+            display: block;
+            margin: 4px 0;
         }
         .stSidebar .stRadio label:hover {
             border-color: #00ffe1;
             box-shadow: 0 0 25px rgba(0, 255, 225, 0.2);
             background: rgba(0, 255, 225, 0.05);
         }
+        
+        /* ---------- BUTTONS (Touch-friendly) ---------- */
         .stButton > button {
             font-family: 'Orbitron', sans-serif !important;
             background: transparent !important;
@@ -102,23 +112,32 @@ st.markdown(
             box-shadow: 0 0 20px rgba(0, 255, 225, 0.2);
             transition: all 0.3s ease !important;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
+            width: 100%;
+            min-height: 44px !important;
+            padding: 10px 16px !important;
+            font-size: 0.8rem !important;
         }
         .stButton > button:hover {
             background: #00ffe1 !important;
             color: #0a0c10 !important;
             box-shadow: 0 0 60px #00ffe1, inset 0 0 20px #0a0c10;
-            transform: scale(1.03);
-            border-color: #00ffe1 !important;
+            transform: scale(1.02);
         }
+        .stButton > button:active {
+            transform: scale(0.95);
+        }
+        
+        /* ---------- GLASS CHAT BUBBLES ---------- */
         .stChatMessage {
             background: rgba(20, 30, 50, 0.6) !important;
             backdrop-filter: blur(8px);
             border: 1px solid rgba(0, 255, 225, 0.2) !important;
             border-radius: 16px !important;
             box-shadow: 0 0 30px rgba(0, 255, 225, 0.05);
-            padding: 12px 18px !important;
-            margin: 8px 0 !important;
+            padding: 10px 14px !important;
+            margin: 6px 0 !important;
+            font-size: 0.9rem !important;
         }
         .stChatMessage.user {
             border-color: #ff00cc !important;
@@ -128,43 +147,119 @@ st.markdown(
             border-color: #00ffe1 !important;
         }
         
+        /* ---------- METRIC CARDS (Gamified) ---------- */
         .stMetric {
             background: rgba(10, 14, 20, 0.7) !important;
             backdrop-filter: blur(4px);
             border: 1px solid rgba(0, 255, 225, 0.2);
             border-radius: 12px;
-            padding: 10px 16px;
+            padding: 8px 12px !important;
             transition: all 0.4s ease;
             box-shadow: 0 0 20px rgba(0, 255, 225, 0.05);
+            min-height: 70px;
         }
         .stMetric:hover {
             border-color: #ff00cc;
             box-shadow: 0 0 50px rgba(255, 0, 204, 0.2);
-            transform: translateY(-4px);
+            transform: translateY(-3px);
         }
         .stMetric label {
             font-family: 'Orbitron', sans-serif !important;
             color: #ff00cc !important;
-            font-size: 0.8rem !important;
+            font-size: 0.65rem !important;
             letter-spacing: 1px;
         }
         .stMetric [data-testid="stMetricValue"] {
             font-family: 'Orbitron', sans-serif !important;
             color: #00ffe1 !important;
-            font-size: 2rem !important;
+            font-size: 1.4rem !important;
             text-shadow: 0 0 30px rgba(0, 255, 225, 0.4);
         }
         
+        /* ---------- FILE UPLOADER ---------- */
+        .stFileUploader > div {
+            border: 2px dashed #00ffe1 !important;
+            background: rgba(0, 255, 225, 0.05) !important;
+            border-radius: 12px;
+            padding: 15px !important;
+        }
+        .stFileUploader > div:hover {
+            border-color: #ff00cc !important;
+            box-shadow: 0 0 40px rgba(255, 0, 204, 0.2);
+        }
+        
+        /* ---------- SLIDER ---------- */
+        .stSlider [data-baseweb="slider"] {
+            accent-color: #ff00cc;
+        }
+        .stSlider [data-testid="stThumbValue"] {
+            color: #00ffe1 !important;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem !important;
+        }
+        
+        /* ---------- RESPONSIVE BREAKPOINTS ---------- */
+        
+        /* Tablets and small desktops */
+        @media (max-width: 992px) {
+            .main-header { font-size: 1.4rem !important; }
+            .sub-header { font-size: 0.8rem !important; }
+            .stMetric [data-testid="stMetricValue"] { font-size: 1.2rem !important; }
+        }
+        
+        /* Mobile phones */
+        @media (max-width: 768px) {
+            .main-header { font-size: 1.2rem !important; letter-spacing: 0px; }
+            .sub-header { font-size: 0.7rem !important; padding-left: 8px; border-left-width: 2px; }
+            .stChatMessage { padding: 8px 10px !important; font-size: 0.8rem !important; }
+            .stMetric { padding: 6px 8px !important; min-height: 60px; }
+            .stMetric label { font-size: 0.55rem !important; }
+            .stMetric [data-testid="stMetricValue"] { font-size: 1.0rem !important; }
+            .stButton > button { font-size: 0.7rem !important; min-height: 40px !important; padding: 8px 12px !important; }
+            .stSidebar .stRadio label { font-size: 0.7rem !important; padding: 4px 8px !important; }
+            .stFileUploader > div { padding: 10px !important; }
+            
+            /* Force columns to stack on mobile */
+            .row-widget.stColumns {
+                flex-direction: column !important;
+                gap: 0.5rem !important;
+            }
+            .row-widget.stColumns > div {
+                width: 100% !important;
+                flex: 1 1 100% !important;
+                max-width: 100% !important;
+                padding: 0 !important;
+            }
+        }
+        
+        /* Very small phones */
+        @media (max-width: 480px) {
+            .main-header { font-size: 1.0rem !important; }
+            .sub-header { font-size: 0.6rem !important; letter-spacing: 0px; }
+            .stChatMessage { font-size: 0.75rem !important; padding: 6px 8px !important; }
+            .stMetric [data-testid="stMetricValue"] { font-size: 0.9rem !important; }
+            .stButton > button { font-size: 0.65rem !important; min-height: 36px !important; }
+        }
+        
+        /* ---------- SCROLLBAR (Desktop only) ---------- */
+        @media (min-width: 769px) {
+            ::-webkit-scrollbar { width: 8px; background: #0a0c10; }
+            ::-webkit-scrollbar-thumb { background: #00ffe1; border-radius: 10px; box-shadow: 0 0 20px #00ffe1; }
+            ::-webkit-scrollbar-track { background: #0a0c10; border-left: 1px solid #ff00cc; }
+        }
+        
+        /* ---------- FOOTER GLITCH ---------- */
         .footer {
             text-align: center;
             font-family: 'Share Tech Mono', monospace;
             color: #ff00cc;
-            font-size: 0.8rem;
-            margin-top: 3rem;
-            padding-top: 1.5rem;
+            font-size: 0.7rem;
+            margin-top: 2rem;
+            padding-top: 1rem;
             border-top: 1px dashed #00ffe1;
             text-shadow: 0 0 10px #ff00cc;
             animation: glitch 2s infinite;
+            word-break: break-word;
         }
         @keyframes glitch {
             0% { opacity: 1; }
@@ -174,48 +269,23 @@ st.markdown(
             98% { opacity: 0; }
             100% { opacity: 1; }
         }
-        .stFileUploader > div {
-            border: 2px dashed #00ffe1 !important;
-            background: rgba(0, 255, 225, 0.05) !important;
-            border-radius: 12px;
-        }
-        .stFileUploader > div:hover {
-            border-color: #ff00cc !important;
-            box-shadow: 0 0 40px rgba(255, 0, 204, 0.2);
-        }
-        .stSlider [data-baseweb="slider"] {
-            accent-color: #ff00cc;
-        }
-        ::-webkit-scrollbar {
-            width: 8px;
-            background: #0a0c10;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #00ffe1;
-            border-radius: 10px;
-            box-shadow: 0 0 20px #00ffe1;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0a0c10;
-            border-left: 1px solid #ff00cc;
-        }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
 # ----------------------------------------------------------------------
-# SIDEBAR – GAMIFIED MENU
+# SIDEBAR – GAMIFIED MENU (Responsive Text)
 # ----------------------------------------------------------------------
 with st.sidebar:
     st.markdown(
         """
-        <div style="text-align: center; padding: 10px 0;">
-            <span style="font-family: 'Orbitron', sans-serif; font-size: 1.5rem; color: #ff00cc; text-shadow: 0 0 30px #ff00cc;">
+        <div style="text-align: center; padding: 8px 0;">
+            <span style="font-family: 'Orbitron', sans-serif; font-size: clamp(1rem, 3vw, 1.5rem); color: #ff00cc; text-shadow: 0 0 30px #ff00cc; display: block;">
                 ⚡ NEON AI ⚡
             </span>
-            <div style="font-family: 'Share Tech Mono', monospace; color: #00ffe1; font-size: 0.7rem; border-bottom: 1px solid #00ffe1; padding-bottom: 10px;">
-                [ SYSTEM v1.1 ]
+            <div style="font-family: 'Share Tech Mono', monospace; color: #00ffe1; font-size: clamp(0.5rem, 1.5vw, 0.7rem); border-bottom: 1px solid #00ffe1; padding-bottom: 8px;">
+                [ SYSTEM v1.2 ]
             </div>
         </div>
         """,
@@ -236,7 +306,7 @@ with st.sidebar:
     st.markdown("---")
     st.markdown(
         """
-        <div style="font-family: 'Share Tech Mono'; color: #b0e0ff; font-size: 0.7rem; text-align: center; border-top: 1px dashed #ff00cc; padding-top: 10px;">
+        <div style="font-family: 'Share Tech Mono'; color: #b0e0ff; font-size: clamp(0.5rem, 1.5vw, 0.7rem); text-align: center; border-top: 1px dashed #ff00cc; padding-top: 8px;">
             🛡️ FIREWALL: ACTIVE<br>
             🔥 CPU: 98%<br>
             🎮 PLAYER: SANKALP
@@ -287,7 +357,7 @@ def project_chatbot():
         elif normalized == "time":
             intent, response, path = "system_time", f"⏰ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", "time"
         elif normalized == "about":
-            intent, response, path = "about", "CYBERPUNK AI v1.0 – Rule-based core with neon UI.", "about"
+            intent, response, path = "about", "CYBERPUNK AI v1.2 – Rule-based core with neon UI.", "about"
         elif normalized in {"ipo", "ipo explanation"}:
             intent, response, path = "ipo", "IPO = Input → Process → Output. Deterministic flow.", "ipo"
         elif normalized in {"guardrail", "guardrails"}:
@@ -303,6 +373,7 @@ def project_chatbot():
     if st.session_state.chat_closed:
         st.warning("⛔ EXIT TRIGGERED. Session closed.")
 
+    # Responsive metrics (will stack on mobile via CSS)
     col1, col2, col3 = st.columns(3)
     col1.metric("🧬 XP GAINED", st.session_state.chat_count)
     col2.metric("⚡ MODEL", "RULE-BASED")
@@ -345,6 +416,7 @@ def project_classification():
                 acc = knn.score(X_test_scaled, y_test)
                 cm = confusion_matrix(y_test, y_pred)
 
+                # Responsive metrics
                 col_m1, col_m2, col_m3 = st.columns(3)
                 col_m1.metric("🎯 ACCURACY", f"{acc:.2%}")
                 col_m2.metric("🧠 TRAIN SAMPLES", len(y_train))
@@ -457,7 +529,7 @@ def project_vision():
     st.markdown('<div class="main-header">🖼️ CYBER EYE (VISION)</div>', unsafe_allow_html=True)
     st.markdown('<div class="sub-header">// YOLOv8 + OCR // REAL-TIME ANALYSIS</div>', unsafe_allow_html=True)
 
-    # Try to import YOLO, EasyOCR, and cv2 inside the function
+    # Lazy imports
     try:
         from ultralytics import YOLO
         YOLO_AVAILABLE = True
@@ -473,9 +545,9 @@ def project_vision():
         easyocr_error = str(e)
 
     if not YOLO_AVAILABLE:
-        st.error(f"⚠️ YOLO not available: {yolo_error}\nPlease install `ultralytics` and `opencv-python-headless`.")
+        st.error(f"⚠️ YOLO not available: {yolo_error}")
     if not EASYOCR_AVAILABLE:
-        st.warning(f"⚠️ EasyOCR not available: {easyocr_error}\nOCR disabled.")
+        st.warning(f"⚠️ EasyOCR not available: {easyocr_error}")
 
     uploaded_file = st.file_uploader("📂 UPLOAD IMAGE", type=["jpg", "jpeg", "png"])
     if uploaded_file:
@@ -483,23 +555,22 @@ def project_vision():
             import cv2
             import numpy as np
         except ImportError:
-            st.error("❌ OpenCV (cv2) is not installed. Please add `opencv-python-headless` to requirements.")
+            st.error("❌ OpenCV (cv2) is not installed.")
             return
 
-        # Load image with PIL and convert to numpy for CV2
         image = Image.open(uploaded_file).convert("RGB")
-        st.image(image, caption="ORIGINAL", width=400)
+        
+        # Responsive: use container width
+        st.image(image, caption="ORIGINAL", use_container_width=True)
 
         col_det, col_ocr = st.columns(2)
 
-        # ---- Object Detection ----
         with col_det:
             st.subheader("🔍 OBJECT DETECTION")
             if YOLO_AVAILABLE:
                 with st.spinner("SCANNING..."):
-                    model = YOLO("yolov8n.pt")  # downloads automatically
+                    model = YOLO("yolov8n.pt")
                     results = model(image)
-                    # results[0].plot() returns numpy array with boxes
                     annotated = results[0].plot()
                     st.image(annotated, caption="DETECTED", use_container_width=True)
                     detections = results[0].boxes
@@ -511,9 +582,8 @@ def project_vision():
                     else:
                         st.info("No objects detected.")
             else:
-                st.warning("YOLO offline – install ultralytics and opencv-python-headless.")
+                st.warning("YOLO offline.")
 
-        # ---- OCR ----
         with col_ocr:
             st.subheader("📝 TEXT EXTRACTION")
             if EASYOCR_AVAILABLE:
@@ -528,7 +598,7 @@ def project_vision():
                     else:
                         st.info("No text found.")
             else:
-                st.warning("OCR offline – install easyocr and torch.")
+                st.warning("OCR offline.")
 
 # ----------------------------------------------------------------------
 # ROUTER
@@ -548,8 +618,8 @@ elif app_mode == "🖼️ VISION":
 st.markdown(
     """
     <div class="footer">
-        ⚡ CYBERPUNK AI SUITE v1.1 || PRACTICAL TRAINING - II || SANKALP SHARMA ⚡
+        ⚡ CYBERPUNK AI SUITE v1.2 || RESPONSIVE || SANKALP SHARMA ⚡
     </div>
     """,
     unsafe_allow_html=True,
-    )
+        )
