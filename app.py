@@ -615,7 +615,7 @@ elif app_mode == "🖼️ VISION":
 # ----------------------------------------------------------------------
 # FOOTER
 # ----------------------------------------------------------------------
-st.markdown(
+st.markdown( 
     """
     <div class="footer">
         ⚡ CYBERPUNK AI SUITE v1.2 || RESPONSIVE || SANKALP SHARMA ⚡
