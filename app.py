@@ -1,7 +1,6 @@
 """
-CYBERPUNK AI SUITE – Neon Dream v1.4 (Lightning Fast)
-Projects: Chatbot · Classification · Recommendation
-Vision: Placeholder (Coming Soon)
+CYBERPUNK AI SUITE – Neon Dream v1.2 (Responsive)
+Projects: Chatbot · Classification · Recommendation · Vision
 """
 
 import logging
@@ -9,8 +8,10 @@ from datetime import datetime
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 import seaborn as sns
 import streamlit as st
+from PIL import Image
 from sklearn.datasets import load_iris
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import classification_report, confusion_matrix
@@ -37,6 +38,7 @@ st.markdown(
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
         
+        /* ---------- GLOBAL BASE (Mobile First) ---------- */
         .stApp {
             background: #0a0c10;
             background-image: 
@@ -47,6 +49,7 @@ st.markdown(
             color: #b0e0ff !important;
         }
         
+        /* ---------- TYPOGRAPHY (Mobile First) ---------- */
         h1, h2, h3, .main-header {
             font-family: 'Orbitron', sans-serif !important;
             font-weight: 900 !important;
@@ -77,6 +80,7 @@ st.markdown(
             word-break: break-word;
         }
         
+        /* ---------- SIDEBAR (Responsive) ---------- */
         .css-1d391kg, .css-1adrfps, .stSidebar {
             background: rgba(10, 14, 20, 0.92) !important;
             backdrop-filter: blur(12px);
@@ -99,6 +103,7 @@ st.markdown(
             background: rgba(0, 255, 225, 0.05);
         }
         
+        /* ---------- BUTTONS (Touch-friendly) ---------- */
         .stButton > button {
             font-family: 'Orbitron', sans-serif !important;
             background: transparent !important;
@@ -123,6 +128,7 @@ st.markdown(
             transform: scale(0.95);
         }
         
+        /* ---------- GLASS CHAT BUBBLES ---------- */
         .stChatMessage {
             background: rgba(20, 30, 50, 0.6) !important;
             backdrop-filter: blur(8px);
@@ -141,6 +147,7 @@ st.markdown(
             border-color: #00ffe1 !important;
         }
         
+        /* ---------- METRIC CARDS (Gamified) ---------- */
         .stMetric {
             background: rgba(10, 14, 20, 0.7) !important;
             backdrop-filter: blur(4px);
@@ -169,6 +176,7 @@ st.markdown(
             text-shadow: 0 0 30px rgba(0, 255, 225, 0.4);
         }
         
+        /* ---------- FILE UPLOADER ---------- */
         .stFileUploader > div {
             border: 2px dashed #00ffe1 !important;
             background: rgba(0, 255, 225, 0.05) !important;
@@ -180,6 +188,7 @@ st.markdown(
             box-shadow: 0 0 40px rgba(255, 0, 204, 0.2);
         }
         
+        /* ---------- SLIDER ---------- */
         .stSlider [data-baseweb="slider"] {
             accent-color: #ff00cc;
         }
@@ -189,12 +198,16 @@ st.markdown(
             font-size: 0.8rem !important;
         }
         
+        /* ---------- RESPONSIVE BREAKPOINTS ---------- */
+        
+        /* Tablets and small desktops */
         @media (max-width: 992px) {
             .main-header { font-size: 1.4rem !important; }
             .sub-header { font-size: 0.8rem !important; }
             .stMetric [data-testid="stMetricValue"] { font-size: 1.2rem !important; }
         }
         
+        /* Mobile phones */
         @media (max-width: 768px) {
             .main-header { font-size: 1.2rem !important; letter-spacing: 0px; }
             .sub-header { font-size: 0.7rem !important; padding-left: 8px; border-left-width: 2px; }
@@ -206,6 +219,7 @@ st.markdown(
             .stSidebar .stRadio label { font-size: 0.7rem !important; padding: 4px 8px !important; }
             .stFileUploader > div { padding: 10px !important; }
             
+            /* Force columns to stack on mobile */
             .row-widget.stColumns {
                 flex-direction: column !important;
                 gap: 0.5rem !important;
@@ -218,6 +232,7 @@ st.markdown(
             }
         }
         
+        /* Very small phones */
         @media (max-width: 480px) {
             .main-header { font-size: 1.0rem !important; }
             .sub-header { font-size: 0.6rem !important; letter-spacing: 0px; }
@@ -226,12 +241,14 @@ st.markdown(
             .stButton > button { font-size: 0.65rem !important; min-height: 36px !important; }
         }
         
+        /* ---------- SCROLLBAR (Desktop only) ---------- */
         @media (min-width: 769px) {
             ::-webkit-scrollbar { width: 8px; background: #0a0c10; }
             ::-webkit-scrollbar-thumb { background: #00ffe1; border-radius: 10px; box-shadow: 0 0 20px #00ffe1; }
             ::-webkit-scrollbar-track { background: #0a0c10; border-left: 1px solid #ff00cc; }
         }
         
+        /* ---------- FOOTER GLITCH ---------- */
         .footer {
             text-align: center;
             font-family: 'Share Tech Mono', monospace;
@@ -258,7 +275,7 @@ st.markdown(
 )
 
 # ----------------------------------------------------------------------
-# SIDEBAR – GAMIFIED MENU
+# SIDEBAR – GAMIFIED MENU (Responsive Text)
 # ----------------------------------------------------------------------
 with st.sidebar:
     st.markdown(
@@ -268,7 +285,7 @@ with st.sidebar:
                 ⚡ NEON AI ⚡
             </span>
             <div style="font-family: 'Share Tech Mono', monospace; color: #00ffe1; font-size: clamp(0.5rem, 1.5vw, 0.7rem); border-bottom: 1px solid #00ffe1; padding-bottom: 8px;">
-                [ SYSTEM v1.4 ]
+                [ SYSTEM v1.2 ]
             </div>
         </div>
         """,
@@ -281,7 +298,7 @@ with st.sidebar:
             "💬 CHATBOT",
             "📊 CLASSIFY",
             "💼 RECOMMEND",
-            "🖼️ VISION (Coming Soon)",
+            "🖼️ VISION",
         ],
         index=0,
     )
@@ -340,7 +357,7 @@ def project_chatbot():
         elif normalized == "time":
             intent, response, path = "system_time", f"⏰ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", "time"
         elif normalized == "about":
-            intent, response, path = "about", "CYBERPUNK AI v1.4 – Rule-based core with neon UI.", "about"
+            intent, response, path = "about", "CYBERPUNK AI v1.2 – Rule-based core with neon UI.", "about"
         elif normalized in {"ipo", "ipo explanation"}:
             intent, response, path = "ipo", "IPO = Input → Process → Output. Deterministic flow.", "ipo"
         elif normalized in {"guardrail", "guardrails"}:
@@ -356,6 +373,7 @@ def project_chatbot():
     if st.session_state.chat_closed:
         st.warning("⛔ EXIT TRIGGERED. Session closed.")
 
+    # Responsive metrics (will stack on mobile via CSS)
     col1, col2, col3 = st.columns(3)
     col1.metric("🧬 XP GAINED", st.session_state.chat_count)
     col2.metric("⚡ MODEL", "RULE-BASED")
@@ -376,9 +394,7 @@ def project_classification():
     X, y, feature_names, target_names = load_iris_data()
 
     with st.expander("📡 DATASET SCAN", expanded=False):
-        st.write("**First 5 samples:**")
-        for i in range(min(5, len(X))):
-            st.write(f"{i+1}. {X[i]} → {target_names[y[i]]}")
+        st.dataframe(pd.DataFrame(X, columns=feature_names).head(5))
 
     col_left, col_right = st.columns([1, 2])
     with col_left:
@@ -400,6 +416,7 @@ def project_classification():
                 acc = knn.score(X_test_scaled, y_test)
                 cm = confusion_matrix(y_test, y_pred)
 
+                # Responsive metrics
                 col_m1, col_m2, col_m3 = st.columns(3)
                 col_m1.metric("🎯 ACCURACY", f"{acc:.2%}")
                 col_m2.metric("🧠 TRAIN SAMPLES", len(y_train))
@@ -417,51 +434,45 @@ def project_classification():
                 st.pyplot(fig)
 
                 st.subheader("📜 CLASSIFICATION REPORT")
-                report = classification_report(y_test, y_pred, target_names=target_names, output_dict=True)
-                st.write("| Class | Precision | Recall | F1-Score | Support |")
-                st.write("|-------|-----------|--------|----------|---------|")
-                for cls in target_names:
-                    r = report[cls]
-                    st.write(f"| {cls} | {r['precision']:.2f} | {r['recall']:.2f} | {r['f1-score']:.2f} | {r['support']} |")
-                st.write(f"| **Accuracy** | | | **{report['accuracy']:.2%}** | {len(y_test)} |")
+                report_df = pd.DataFrame(classification_report(y_test, y_pred, target_names=target_names, output_dict=True)).transpose()
+                st.dataframe(report_df.style.background_gradient(cmap="coolwarm", subset=["precision", "recall", "f1-score"]))
         else:
             st.info("👈 ADJUST PARAMETERS & DEPLOY.")
 
 # ----------------------------------------------------------------------
-# PROJECT 3: RECOMMENDATION (Pandas-Free)
+# PROJECT 3: RECOMMENDATION
 # ----------------------------------------------------------------------
 @st.cache_data
 def get_job_data():
-    job_titles = ["Data Scientist", "ML Engineer", "Cloud Architect", "Web Dev", "DevOps", 
-                  "Data Analyst", "Full Stack", "Python Dev", "Frontend", "Backend", 
-                  "Security", "Mobile"]
-    categories = ["Data", "AI", "Cloud", "Web", "Ops", "Data", "Web", "Dev", "Web", "Dev", "Sec", "Mobile"]
-    skills = [
-        "Python SQL ML Stats Deep Learning Pandas",
-        "Python TensorFlow PyTorch Docker Kubernetes MLflow",
-        "AWS Azure GCP Terraform Kubernetes Python DevOps",
-        "HTML CSS JavaScript React Node.js MongoDB Express",
-        "Linux Docker Kubernetes AWS Jenkins CI/CD Python Shell",
-        "SQL Excel Tableau Python Pandas Stats Power BI",
-        "JavaScript React Node.js MongoDB Express HTML CSS",
-        "Python Django Flask REST API SQL Git",
-        "HTML CSS JavaScript React TypeScript Webpack",
-        "Node.js Python Java Spring Boot SQL REST API",
-        "Network Security Python Firewalls SIEM Linux AWS",
-        "iOS Android Swift Kotlin React Native Java",
-    ]
-    return job_titles, categories, skills
+    return pd.DataFrame({
+        "Job_Title": ["Data Scientist", "ML Engineer", "Cloud Architect", "Web Dev", "DevOps", 
+                      "Data Analyst", "Full Stack", "Python Dev", "Frontend", "Backend", 
+                      "Security", "Mobile"],
+        "Category": ["Data", "AI", "Cloud", "Web", "Ops", "Data", "Web", "Dev", "Web", "Dev", "Sec", "Mobile"],
+        "Skills": [
+            "Python SQL ML Stats Deep Learning Pandas",
+            "Python TensorFlow PyTorch Docker Kubernetes MLflow",
+            "AWS Azure GCP Terraform Kubernetes Python DevOps",
+            "HTML CSS JavaScript React Node.js MongoDB Express",
+            "Linux Docker Kubernetes AWS Jenkins CI/CD Python Shell",
+            "SQL Excel Tableau Python Pandas Stats Power BI",
+            "JavaScript React Node.js MongoDB Express HTML CSS",
+            "Python Django Flask REST API SQL Git",
+            "HTML CSS JavaScript React TypeScript Webpack",
+            "Node.js Python Java Spring Boot SQL REST API",
+            "Network Security Python Firewalls SIEM Linux AWS",
+            "iOS Android Swift Kotlin React Native Java",
+        ],
+    })
 
 def project_recommendation():
     st.markdown('<div class="main-header">💼 SKILLS SYNAPSE (RECOMMENDER)</div>', unsafe_allow_html=True)
     st.markdown('<div class="sub-header">// CONTENT-BASED FILTERING // TF-IDF + COSINE</div>', unsafe_allow_html=True)
 
-    job_titles, categories, skills = get_job_data()
+    jobs = get_job_data()
 
     with st.expander("🗃️ JOB DATABASE", expanded=False):
-        st.write("**Available Roles:**")
-        for i, (title, cat) in enumerate(zip(job_titles, categories)):
-            st.write(f"{i+1}. **{title}** ({cat})")
+        st.dataframe(jobs)
 
     col_left, col_right = st.columns([1, 2])
     with col_left:
@@ -480,19 +491,17 @@ def project_recommendation():
             normalized = [alias.get(s.lower(), s.lower()) for s in user_skills]
             user_profile = " ".join(normalized)
 
-            documents = skills + [user_profile]
+            documents = jobs["Skills"].tolist() + [user_profile]
             vectorizer = TfidfVectorizer(stop_words="english", ngram_range=(1, 2))
             tfidf = vectorizer.fit_transform(documents)
             similarities = cosine_similarity(tfidf[-1], tfidf[:-1]).flatten()
+            jobs["Similarity"] = similarities
+            top_results = jobs.sort_values("Similarity", ascending=False).head(top_n)
 
-            top_indices = np.argsort(similarities)[::-1][:top_n]
-            
             plt.style.use('dark_background')
             fig, ax = plt.subplots(figsize=(8, 4))
-            top_titles = [job_titles[i] for i in top_indices]
-            top_scores = similarities[top_indices] * 100
-            colors = ['#00ffe1', '#ff00cc', '#ffcc00', '#00ff88', '#ff8844'][:top_n]
-            bars = ax.barh(top_titles, top_scores, color=colors)
+            bars = ax.barh(top_results["Job_Title"], top_results["Similarity"] * 100, 
+                           color=['#00ffe1', '#ff00cc', '#ffcc00'][:top_n])
             ax.set_xlabel("SIMILARITY %", color='#00ffe1')
             ax.set_title("TOP MATCHES", color='#ff00cc', fontsize=14)
             ax.tick_params(colors='#b0e0ff')
@@ -501,12 +510,12 @@ def project_recommendation():
                 ax.text(width + 0.5, bar.get_y() + bar.get_height()/2, f"{width:.1f}%", va='center', color='#00ffe1')
             st.pyplot(fig)
 
-            for idx in top_indices:
+            for idx, row in top_results.iterrows():
                 with st.container():
-                    st.markdown(f"**🔥 {job_titles[idx]}**  ·  *{categories[idx]}*")
-                    st.write(f"📊 MATCH: **{similarities[idx]:.1%}**")
-                    st.write(f"⚙️ REQUIREMENTS: {skills[idx]}")
-                    match = set(normalized).intersection(set(skills[idx].lower().split()))
+                    st.markdown(f"**🔥 {row['Job_Title']}**  ·  *{row['Category']}*")
+                    st.write(f"📊 MATCH: **{row['Similarity']:.1%}**")
+                    st.write(f"⚙️ REQUIREMENTS: {row['Skills']}")
+                    match = set(normalized).intersection(set(row["Skills"].lower().split()))
                     if match:
                         st.success(f"✅ SYNAPSE MATCH: {', '.join(match)}")
                     st.divider()
@@ -514,26 +523,82 @@ def project_recommendation():
             st.info("👈 INPUT SKILLS & SCAN.")
 
 # ----------------------------------------------------------------------
-# PROJECT 4: VISION (PLACEHOLDER)
+# PROJECT 4: VISION – LAZY LOAD ALL HEAVY STUFF
 # ----------------------------------------------------------------------
-def project_vision_placeholder():
+def project_vision():
     st.markdown('<div class="main-header">🖼️ CYBER EYE (VISION)</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-header">// COMING SOON // YOLOv8 + OCR</div>', unsafe_allow_html=True)
-    
-    st.info("""
-    **🛠️ Vision Module is under development.**  
-    It will feature:
-    - Real-time object detection (YOLOv8)
-    - Optical Character Recognition (EasyOCR)
-    - Bounding box annotations
-    - Text extraction from images
-    
-    This module will be available in the next release.
-    """)
-    
-    # Show a cool placeholder image
-    st.image("https://img.icons8.com/fluency/200/000000/artificial-intelligence.png", width=150)
-    st.caption("AI Vision – Coming Soon")
+    st.markdown('<div class="sub-header">// YOLOv8 + OCR // REAL-TIME ANALYSIS</div>', unsafe_allow_html=True)
+
+    # Lazy imports
+    try:
+        from ultralytics import YOLO
+        YOLO_AVAILABLE = True
+    except ImportError as e:
+        YOLO_AVAILABLE = False
+        yolo_error = str(e)
+
+    try:
+        import easyocr
+        EASYOCR_AVAILABLE = True
+    except ImportError as e:
+        EASYOCR_AVAILABLE = False
+        easyocr_error = str(e)
+
+    if not YOLO_AVAILABLE:
+        st.error(f"⚠️ YOLO not available: {yolo_error}")
+    if not EASYOCR_AVAILABLE:
+        st.warning(f"⚠️ EasyOCR not available: {easyocr_error}")
+
+    uploaded_file = st.file_uploader("📂 UPLOAD IMAGE", type=["jpg", "jpeg", "png"])
+    if uploaded_file:
+        try:
+            import cv2
+            import numpy as np
+        except ImportError:
+            st.error("❌ OpenCV (cv2) is not installed.")
+            return
+
+        image = Image.open(uploaded_file).convert("RGB")
+        
+        # Responsive: use container width
+        st.image(image, caption="ORIGINAL", use_container_width=True)
+
+        col_det, col_ocr = st.columns(2)
+
+        with col_det:
+            st.subheader("🔍 OBJECT DETECTION")
+            if YOLO_AVAILABLE:
+                with st.spinner("SCANNING..."):
+                    model = YOLO("yolov8n.pt")
+                    results = model(image)
+                    annotated = results[0].plot()
+                    st.image(annotated, caption="DETECTED", use_container_width=True)
+                    detections = results[0].boxes
+                    if detections is not None and len(detections) > 0:
+                        for box in detections:
+                            cls = int(box.cls[0])
+                            conf = float(box.conf[0])
+                            st.caption(f"- {model.names[cls]} (conf: {conf:.2f})")
+                    else:
+                        st.info("No objects detected.")
+            else:
+                st.warning("YOLO offline.")
+
+        with col_ocr:
+            st.subheader("📝 TEXT EXTRACTION")
+            if EASYOCR_AVAILABLE:
+                with st.spinner("DECRYPTING..."):
+                    reader = easyocr.Reader(["en"])
+                    img_np = np.array(image)
+                    ocr_result = reader.readtext(img_np, detail=0)
+                    if ocr_result:
+                        st.success(f"EXTRACTED {len(ocr_result)} BLOCKS:")
+                        for t in ocr_result:
+                            st.write(f"- {t}")
+                    else:
+                        st.info("No text found.")
+            else:
+                st.warning("OCR offline.")
 
 # ----------------------------------------------------------------------
 # ROUTER
@@ -544,8 +609,8 @@ elif app_mode == "📊 CLASSIFY":
     project_classification()
 elif app_mode == "💼 RECOMMEND":
     project_recommendation()
-elif app_mode == "🖼️ VISION (Coming Soon)":
-    project_vision_placeholder()
+elif app_mode == "🖼️ VISION":
+    project_vision()
 
 # ----------------------------------------------------------------------
 # FOOTER
@@ -553,8 +618,8 @@ elif app_mode == "🖼️ VISION (Coming Soon)":
 st.markdown(
     """
     <div class="footer">
-        ⚡ CYBERPUNK AI SUITE v1.4 || LIGHTNING FAST || SANKALP SHARMA ⚡
+        ⚡ CYBERPUNK AI SUITE v1.2 || RESPONSIVE || SANKALP SHARMA ⚡
     </div>
     """,
     unsafe_allow_html=True,
-)
+            )
