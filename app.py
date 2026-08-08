@@ -66,7 +66,7 @@ selected_page = st.sidebar.radio("", nav_options, index=0, label_visibility="col
 st.sidebar.markdown("---")
 st.sidebar.markdown(f"""
 **Student:** SANKALP SHARMA  
-**Roll No:** [Your Roll No]  
+**Roll No:** 26375  
 **Certificate:** DA012607
 """)
 
