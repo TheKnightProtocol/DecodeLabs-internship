@@ -1,5 +1,5 @@
 """
-CYBERPUNK AI SUITE – Neon Dream v1.0
+CYBERPUNK AI SUITE – Neon Dream v1.1 (Lazy Load)
 Projects: Chatbot · Classification · Recommendation · Vision
 """
 
@@ -19,14 +19,6 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
-from ultralytics import YOLO
-
-try:
-    import easyocr
-    EASYOCR_AVAILABLE = True
-except ImportError:
-    EASYOCR_AVAILABLE = False
-    easyocr = None
 
 # ----------------------------------------------------------------------
 # PAGE CONFIG
@@ -39,14 +31,13 @@ st.set_page_config(
 )
 
 # ----------------------------------------------------------------------
-# CYBERPUNK NEON CSS – THE WHOLE VIBE
+# CYBERPUNK NEON CSS
 # ----------------------------------------------------------------------
 st.markdown(
     """
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
         
-        /* GLOBAL DARK MATRIX */
         .stApp {
             background: #0a0c10;
             background-image: 
@@ -57,7 +48,6 @@ st.markdown(
             color: #b0e0ff !important;
         }
         
-        /* TYPOGRAPHY */
         h1, h2, h3, .main-header {
             font-family: 'Orbitron', sans-serif !important;
             font-weight: 900 !important;
@@ -85,7 +75,6 @@ st.markdown(
             padding-left: 15px;
         }
         
-        /* GLASS SIDEBAR */
         .css-1d391kg, .css-1adrfps, .stSidebar {
             background: rgba(10, 14, 20, 0.85) !important;
             backdrop-filter: blur(12px);
@@ -105,12 +94,6 @@ st.markdown(
             box-shadow: 0 0 25px rgba(0, 255, 225, 0.2);
             background: rgba(0, 255, 225, 0.05);
         }
-        .stSidebar .stRadio [data-baseweb="radio"] input:checked + div {
-            border-color: #ff00cc !important;
-            box-shadow: 0 0 30px #ff00cc;
-        }
-        
-        /* NEON BUTTONS */
         .stButton > button {
             font-family: 'Orbitron', sans-serif !important;
             background: transparent !important;
@@ -128,11 +111,6 @@ st.markdown(
             transform: scale(1.03);
             border-color: #00ffe1 !important;
         }
-        .stButton > button:active {
-            transform: scale(0.95);
-        }
-        
-        /* GLASS CHAT BUBBLES */
         .stChatMessage {
             background: rgba(20, 30, 50, 0.6) !important;
             backdrop-filter: blur(8px);
@@ -150,7 +128,6 @@ st.markdown(
             border-color: #00ffe1 !important;
         }
         
-        /* METRIC CARDS (GAMIFIED) */
         .stMetric {
             background: rgba(10, 14, 20, 0.7) !important;
             backdrop-filter: blur(4px);
@@ -178,36 +155,6 @@ st.markdown(
             text-shadow: 0 0 30px rgba(0, 255, 225, 0.4);
         }
         
-        /* EXPANDERS (TERMINAL STYLE) */
-        .streamlit-expanderHeader {
-            font-family: 'Share Tech Mono', monospace !important;
-            background: rgba(0, 255, 225, 0.05) !important;
-            border: 1px solid rgba(0, 255, 225, 0.2);
-            border-radius: 8px;
-            color: #00ffe1 !important;
-        }
-        .streamlit-expanderContent {
-            background: rgba(10, 14, 20, 0.8);
-            border-left: 2px solid #ff00cc;
-            border-radius: 0 0 8px 8px;
-            padding: 15px;
-        }
-        
-        /* DATA FRAME (HACKER TABLES) */
-        .dataframe {
-            background: rgba(10, 14, 20, 0.9) !important;
-            border: 1px solid #00ffe1 !important;
-        }
-        .dataframe th {
-            font-family: 'Orbitron', sans-serif !important;
-            color: #ff00cc !important;
-            background: rgba(0, 255, 225, 0.1) !important;
-        }
-        .dataframe td {
-            color: #b0e0ff !important;
-        }
-        
-        /* FOOTER GLITCH */
         .footer {
             text-align: center;
             font-family: 'Share Tech Mono', monospace;
@@ -227,8 +174,6 @@ st.markdown(
             98% { opacity: 0; }
             100% { opacity: 1; }
         }
-        
-        /* FILE UPLOADER NEON */
         .stFileUploader > div {
             border: 2px dashed #00ffe1 !important;
             background: rgba(0, 255, 225, 0.05) !important;
@@ -238,17 +183,9 @@ st.markdown(
             border-color: #ff00cc !important;
             box-shadow: 0 0 40px rgba(255, 0, 204, 0.2);
         }
-        
-        /* SLIDER NEON */
         .stSlider [data-baseweb="slider"] {
             accent-color: #ff00cc;
         }
-        .stSlider [data-testid="stThumbValue"] {
-            color: #00ffe1 !important;
-            font-family: 'Orbitron', sans-serif;
-        }
-        
-        /* SCROLLBAR CYBER */
         ::-webkit-scrollbar {
             width: 8px;
             background: #0a0c10;
@@ -278,7 +215,7 @@ with st.sidebar:
                 ⚡ NEON AI ⚡
             </span>
             <div style="font-family: 'Share Tech Mono', monospace; color: #00ffe1; font-size: 0.7rem; border-bottom: 1px solid #00ffe1; padding-bottom: 10px;">
-                [ SYSTEM v1.0 ]
+                [ SYSTEM v1.1 ]
             </div>
         </div>
         """,
@@ -413,7 +350,6 @@ def project_classification():
                 col_m2.metric("🧠 TRAIN SAMPLES", len(y_train))
                 col_m3.metric("💾 TEST SAMPLES", len(y_test))
 
-                # Neon style for matplotlib
                 plt.style.use('dark_background')
                 fig, ax = plt.subplots(figsize=(6, 4))
                 sns.heatmap(cm, annot=True, fmt="d", cmap="coolwarm", 
@@ -490,7 +426,6 @@ def project_recommendation():
             jobs["Similarity"] = similarities
             top_results = jobs.sort_values("Similarity", ascending=False).head(top_n)
 
-            # Neon Plot
             plt.style.use('dark_background')
             fig, ax = plt.subplots(figsize=(8, 4))
             bars = ax.barh(top_results["Job_Title"], top_results["Similarity"] * 100, 
@@ -516,50 +451,76 @@ def project_recommendation():
             st.info("👈 INPUT SKILLS & SCAN.")
 
 # ----------------------------------------------------------------------
-# PROJECT 4: VISION
+# PROJECT 4: VISION – LAZY LOAD ALL HEAVY STUFF
 # ----------------------------------------------------------------------
-@st.cache_resource
-def load_yolo():
-    return YOLO("yolov8n.pt")
-
-@st.cache_resource
-def load_easyocr():
-    if EASYOCR_AVAILABLE:
-        return easyocr.Reader(["en"])
-    return None
-
 def project_vision():
     st.markdown('<div class="main-header">🖼️ CYBER EYE (VISION)</div>', unsafe_allow_html=True)
     st.markdown('<div class="sub-header">// YOLOv8 + OCR // REAL-TIME ANALYSIS</div>', unsafe_allow_html=True)
 
+    # Try to import YOLO, EasyOCR, and cv2 inside the function
+    try:
+        from ultralytics import YOLO
+        YOLO_AVAILABLE = True
+    except ImportError as e:
+        YOLO_AVAILABLE = False
+        yolo_error = str(e)
+
+    try:
+        import easyocr
+        EASYOCR_AVAILABLE = True
+    except ImportError as e:
+        EASYOCR_AVAILABLE = False
+        easyocr_error = str(e)
+
+    if not YOLO_AVAILABLE:
+        st.error(f"⚠️ YOLO not available: {yolo_error}\nPlease install `ultralytics` and `opencv-python-headless`.")
     if not EASYOCR_AVAILABLE:
-        st.error("⚠️ OCR MODULE OFFLINE. Install EasyOCR.")
-    
+        st.warning(f"⚠️ EasyOCR not available: {easyocr_error}\nOCR disabled.")
+
     uploaded_file = st.file_uploader("📂 UPLOAD IMAGE", type=["jpg", "jpeg", "png"])
     if uploaded_file:
+        try:
+            import cv2
+            import numpy as np
+        except ImportError:
+            st.error("❌ OpenCV (cv2) is not installed. Please add `opencv-python-headless` to requirements.")
+            return
+
+        # Load image with PIL and convert to numpy for CV2
         image = Image.open(uploaded_file).convert("RGB")
         st.image(image, caption="ORIGINAL", width=400)
 
         col_det, col_ocr = st.columns(2)
+
+        # ---- Object Detection ----
         with col_det:
             st.subheader("🔍 OBJECT DETECTION")
-            with st.spinner("SCANNING..."):
-                model = load_yolo()
-                results = model(image)
-                fig = results[0].plot()
-                st.image(fig, caption="DETECTED", use_container_width=True)
-                detections = results[0].boxes
-                if detections is not None and len(detections) > 0:
-                    for box in detections:
-                        cls = int(box.cls[0])
-                        conf = float(box.conf[0])
-                        st.caption(f"- {model.names[cls]} (conf: {conf:.2f})")
+            if YOLO_AVAILABLE:
+                with st.spinner("SCANNING..."):
+                    model = YOLO("yolov8n.pt")  # downloads automatically
+                    results = model(image)
+                    # results[0].plot() returns numpy array with boxes
+                    annotated = results[0].plot()
+                    st.image(annotated, caption="DETECTED", use_container_width=True)
+                    detections = results[0].boxes
+                    if detections is not None and len(detections) > 0:
+                        for box in detections:
+                            cls = int(box.cls[0])
+                            conf = float(box.conf[0])
+                            st.caption(f"- {model.names[cls]} (conf: {conf:.2f})")
+                    else:
+                        st.info("No objects detected.")
+            else:
+                st.warning("YOLO offline – install ultralytics and opencv-python-headless.")
+
+        # ---- OCR ----
         with col_ocr:
             st.subheader("📝 TEXT EXTRACTION")
             if EASYOCR_AVAILABLE:
                 with st.spinner("DECRYPTING..."):
-                    reader = load_easyocr()
-                    ocr_result = reader.readtext(np.array(image), detail=0)
+                    reader = easyocr.Reader(["en"])
+                    img_np = np.array(image)
+                    ocr_result = reader.readtext(img_np, detail=0)
                     if ocr_result:
                         st.success(f"EXTRACTED {len(ocr_result)} BLOCKS:")
                         for t in ocr_result:
@@ -567,7 +528,7 @@ def project_vision():
                     else:
                         st.info("No text found.")
             else:
-                st.warning("OCR OFFLINE.")
+                st.warning("OCR offline – install easyocr and torch.")
 
 # ----------------------------------------------------------------------
 # ROUTER
@@ -587,8 +548,8 @@ elif app_mode == "🖼️ VISION":
 st.markdown(
     """
     <div class="footer">
-        ⚡ CYBERPUNK AI SUITE v1.0 || PRACTICAL TRAINING - II || SANKALP SHARMA ⚡
+        ⚡ CYBERPUNK AI SUITE v1.1 || PRACTICAL TRAINING - II || SANKALP SHARMA ⚡
     </div>
     """,
     unsafe_allow_html=True,
-            )
+    )
