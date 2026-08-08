@@ -8,13 +8,11 @@ import tempfile
 from datetime import datetime
 from pathlib import Path
 
-import easyocr
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
 import streamlit as st
-import yaml
 from PIL import Image
 from sklearn.datasets import load_iris
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -24,6 +22,14 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
 from ultralytics import YOLO
+
+# ---- Try to import EasyOCR ----
+try:
+    import easyocr
+    EASYOCR_AVAILABLE = True
+except ImportError:
+    EASYOCR_AVAILABLE = False
+    easyocr = None
 
 # ----------------------------------------------------------------------
 # PAGE CONFIG
@@ -477,7 +483,10 @@ def load_yolo():
 
 @st.cache_resource
 def load_easyocr():
-    return easyocr.Reader(["en"])
+    if EASYOCR_AVAILABLE:
+        return easyocr.Reader(["en"])
+    else:
+        return None
 
 
 def project_vision():
@@ -486,6 +495,12 @@ def project_vision():
         '<div class="sub-header">YOLOv8 Object Detection + EasyOCR Text Extraction</div>',
         unsafe_allow_html=True,
     )
+
+    if not EASYOCR_AVAILABLE:
+        st.error("⚠️ EasyOCR is not installed. Please add `easyocr` and `torch` to your requirements.txt and redeploy. OCR will be disabled until then.")
+        # Still allow YOLO
+    else:
+        st.success("✅ OCR engine loaded successfully.")
 
     uploaded_file = st.file_uploader(
         "Upload an image (JPG, PNG, JPEG)",
@@ -522,20 +537,21 @@ def project_vision():
 
         with col_ocr:
             st.subheader("📝 Text Extraction (EasyOCR)")
-            with st.spinner("Running OCR..."):
-                reader = load_easyocr()
-                # Convert PIL to numpy
-                import numpy as np
+            if EASYOCR_AVAILABLE:
+                with st.spinner("Running OCR..."):
+                    reader = load_easyocr()
+                    # Convert PIL to numpy
+                    img_np = np.array(image)
+                    ocr_result = reader.readtext(img_np, detail=0)
 
-                img_np = np.array(image)
-                ocr_result = reader.readtext(img_np, detail=0)
-
-                if ocr_result:
-                    st.success(f"Extracted {len(ocr_result)} text block(s):")
-                    for i, text in enumerate(ocr_result, 1):
-                        st.write(f"{i}. {text}")
-                else:
-                    st.info("No text found in the image.")
+                    if ocr_result:
+                        st.success(f"Extracted {len(ocr_result)} text block(s):")
+                        for i, text in enumerate(ocr_result, 1):
+                            st.write(f"{i}. {text}")
+                    else:
+                        st.info("No text found in the image.")
+            else:
+                st.warning("OCR is unavailable – install EasyOCR to use this feature.")
 
     else:
         st.info("👆 Upload an image to start analysis.")
@@ -563,4 +579,4 @@ st.markdown(
     </div>
     """,
     unsafe_allow_html=True,
-)
+    )
