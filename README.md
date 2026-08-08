@@ -3,7 +3,7 @@
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-UI-red.svg)](https://streamlit.io/)
 [![Scikit-learn](https://img.shields.io/badge/Scikit--learn-ML-orange.svg)](https://scikit-learn.org/)
-[![Pandas](https://img.shields.io/badge/Pandas-Data%20Handling-lightgrey.svg)](https://pandas.pydata.org/)
+[![Pandas](https://img.shields.io/badge/Pandas-Data%20Handling-lightgrey.svg)](https://pandas.pydata.org/) 
 [![Matplotlib](https://img.shields.io/badge/Matplotlib-Visualization-blueviolet.svg)](https://matplotlib.org/)
 
 ## Repository Summary
