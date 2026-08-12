@@ -663,7 +663,7 @@ def project_vision():
             st.markdown("""
 **Most common cause:** NumPy 2.x is installed, but YOLO / EasyOCR need NumPy 1.x.
 
-**Recommended fix (copy-paste these commands one by one):**
+**Recommended fix (run these commands one by one):**
 
 ```bash
 pip uninstall -y numpy ultralytics easyocr opencv-python opencv-python-headless
